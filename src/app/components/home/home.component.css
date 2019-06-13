@@ -1,0 +1,11 @@
+.div-component {
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 0 auto;
+}
+
+.ui-inputgroup {
+    width: fit-content;
+    margin: 0 auto;
+    margin-bottom: 15px;
+}

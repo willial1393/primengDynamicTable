@@ -6,20 +6,34 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CardModule} from 'primeng/card';
 import {ButtonModule} from 'primeng/button';
 import {SplitButtonModule} from 'primeng/splitbutton';
-import {CodeHighlighterModule, DialogModule, DropdownModule, EditorModule, MultiSelectModule, TabViewModule} from 'primeng/primeng';
+import {
+    CodeHighlighterModule,
+    DialogModule,
+    DropdownModule,
+    EditorModule,
+    InputTextModule,
+    MultiSelectModule,
+    PasswordModule,
+    TabViewModule
+} from 'primeng/primeng';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {ToastModule} from 'primeng/toast';
 import {CommonModule} from '@angular/common';
-import {RouterModule} from '@angular/router';
-import { SilubComponent } from './components/silub/silub.component';
-import { JovitaComponent } from './components/jovita/jovita.component';
+import {SilubComponent} from './components/silub/silub.component';
+import {JovitaComponent} from './components/jovita/jovita.component';
+import {HomeComponent} from './components/home/home.component';
+import {AdminComponent} from './components/admin/admin.component';
+import {AppRoutingModule} from './app-routing.module';
+
 
 @NgModule({
     declarations: [
         AppComponent,
         SilubComponent,
-        JovitaComponent
+        JovitaComponent,
+        HomeComponent,
+        AdminComponent
     ],
     imports: [
         BrowserModule,
@@ -37,8 +51,10 @@ import { JovitaComponent } from './components/jovita/jovita.component';
         CodeHighlighterModule,
         MultiSelectModule,
         EditorModule,
-        RouterModule.forRoot([]),
-        DialogModule
+        DialogModule,
+        InputTextModule,
+        PasswordModule,
+        AppRoutingModule
     ],
     providers: [],
     bootstrap: [AppComponent]

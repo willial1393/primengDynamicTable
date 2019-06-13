@@ -1,0 +1,38 @@
+<p-dialog header="Ingresar" [(visible)]="display" [modal]="true" [responsive]="true"
+          [style]="{width: '350px', minWidth: '200px'}" [minY]="70"
+          [maximizable]="false" [baseZIndex]="10000"
+          [showHeader]="false"
+          [contentStyle]="{border: '1px solid #c86d59',  backgroundColor: '#f44e41'}">
+    <form ngNativeValidate (submit)="login()" class="text-center">
+        <div class="ui-inputgroup">
+            <span class="ui-inputgroup-addon"><i class="pi pi-user"></i></span>
+            <input type="text" pInputText placeholder="Usuario"
+                   [(ngModel)]="username" name="username">
+        </div>
+        <div class="ui-inputgroup">
+            <span class="ui-inputgroup-addon"><i class="pi pi-key"></i></span>
+            <input type="password" pPassword [(ngModel)]="password" name="password"
+                   placeholder="Contraseña"/>
+        </div>
+        <div class="ui-inputgroup">
+            <button type="submit" pButton icon="pi pi-sign-in" label="Ingresar"></button>
+        </div>
+    </form>
+</p-dialog>
+
+<div style="width: 100%; text-align: right">
+    <button type="button" (click)="showDialog()" pButton icon="pi pi-sign-in" label="Login"></button>
+</div>
+
+<div class="row">
+    <div class="col-sm text-center">
+        <div class="div-component">
+            <app-silub></app-silub>
+        </div>
+    </div>
+    <div class="col-sm text-center">
+        <div class="div-component">
+            <app-jovita></app-jovita>
+        </div>
+    </div>
+</div>
