@@ -12,6 +12,7 @@ import {
     DropdownModule,
     EditorModule,
     InputTextModule,
+    MessageService,
     MultiSelectModule,
     PasswordModule,
     TabViewModule
@@ -25,6 +26,7 @@ import {JovitaComponent} from './components/jovita/jovita.component';
 import {HomeComponent} from './components/home/home.component';
 import {AdminComponent} from './components/admin/admin.component';
 import {AppRoutingModule} from './app-routing.module';
+import {TableModule} from 'primeng/table';
 
 
 @NgModule({
@@ -54,9 +56,12 @@ import {AppRoutingModule} from './app-routing.module';
         DialogModule,
         InputTextModule,
         PasswordModule,
-        AppRoutingModule
+        AppRoutingModule,
+        TableModule
     ],
-    providers: [],
+    providers: [
+        MessageService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

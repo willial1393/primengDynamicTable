@@ -2,7 +2,8 @@
           [style]="{width: '350px', minWidth: '200px'}" [minY]="70"
           [maximizable]="false" [baseZIndex]="10000"
           [showHeader]="false"
-          [contentStyle]="{border: '1px solid #c86d59',  backgroundColor: '#f44e41'}">
+          [dismissableMask]="true"
+          [contentStyle]="{borderColor: 'transparent',backgroundColor: 'transparent'}">
     <form ngNativeValidate (submit)="login()" class="text-center">
         <div class="ui-inputgroup">
             <span class="ui-inputgroup-addon"><i class="pi pi-user"></i></span>
