@@ -27,13 +27,47 @@
 
 <div class="row">
     <div class="col-sm text-center">
-        <div class="div-component">
-            <app-silub></app-silub>
-        </div>
-    </div>
-    <div class="col-sm text-center">
-        <div class="div-component">
-            <app-jovita></app-jovita>
-        </div>
+        <ng-container *ngFor="let p of projects">
+            <div class="div-component">
+                <p-card header="{{p.name}}" subheader="{{p.type}}"
+                        [style]="styleCards"
+                        styleClass="ui-card-shadow">
+                    <p-header>
+                        <a href="{{p.url}}">
+                            <img src="{{p.image}}" alt="" style="width: 50%; height: 50%">
+                        </a>
+                    </p-header>
+                    <div>{{p.description}}</div>
+                    <p-footer>
+                        <p-splitButton label="Estado" icon="pi pi-exclamation-triangle"
+                                       (onClick)="p.displaystate = true"
+                                       [model]="p.item"></p-splitButton>
+                    </p-footer>
+                </p-card>
+
+                <p-dialog header="{{p.name}}" [(visible)]="p.displaystate" [style]="{maxWidth: '500px'}">
+                    <h3 class="first">Single Sort</h3>
+                    <p-table [columns]="cols" [value]="p.values">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                    {{col.header}}
+                                    <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                                                ariaLabelDesc="Activate to sort in descending order"
+                                                ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr>
+                                <td *ngFor="let col of columns">
+                                    {{rowData[col.field]}}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-dialog>
+            </div>
+        </ng-container>
     </div>
 </div>

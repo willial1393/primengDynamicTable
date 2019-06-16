@@ -21,8 +21,6 @@ import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {ToastModule} from 'primeng/toast';
 import {CommonModule} from '@angular/common';
-import {SilubComponent} from './components/silub/silub.component';
-import {JovitaComponent} from './components/jovita/jovita.component';
 import {HomeComponent} from './components/home/home.component';
 import {AdminComponent} from './components/admin/admin.component';
 import {AppRoutingModule} from './app-routing.module';
@@ -32,8 +30,6 @@ import {TableModule} from 'primeng/table';
 @NgModule({
     declarations: [
         AppComponent,
-        SilubComponent,
-        JovitaComponent,
         HomeComponent,
         AdminComponent
     ],
