@@ -10,10 +10,19 @@ export class Project {
     image: string;
     description: string;
     state_id: number;
-    state = State;
+    state: State;
     item: MenuItem[];
     module: Module[];
     // variables
     displaystate = false;
     values: any;
+
+    getJson() {
+        delete this.state;
+        delete this.item;
+        delete this.module;
+        delete this.displaystate;
+        delete this.values;
+        return this;
+    }
 }

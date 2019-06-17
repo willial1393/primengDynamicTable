@@ -3,6 +3,9 @@ import {Router} from '@angular/router';
 import {ProjectService} from '../../services/project.service';
 import {AppComponent} from '../../app.component';
 import {Project} from '../../models/project';
+import {UserService} from '../../services/user.service';
+import {User} from '../../models/user';
+import {ConfigGlobal} from '../../utilities/config-global';
 
 @Component({
     selector: 'app-home',
@@ -12,8 +15,7 @@ import {Project} from '../../models/project';
 export class HomeComponent implements OnInit {
 
     display = false;
-    password: string;
-    username: string;
+    userLogin: User = new User();
 
     projects: Project[] = [];
 
@@ -22,8 +24,8 @@ export class HomeComponent implements OnInit {
 
     constructor(private router: Router,
                 private projectService: ProjectService,
-                private appComponent: AppComponent) {
-
+                private appComponent: AppComponent,
+                private userService: UserService) {
         this.styleCards = appComponent.styleCards;
         this.cols = [
             {field: 'name', header: 'Modulo'},
@@ -41,15 +43,14 @@ export class HomeComponent implements OnInit {
                     });
                     return x;
                 });
-                console.log(this.projects);
             } else {
-                this.appComponent.showErrorService(res['error']);
+                this.appComponent.showErrorService(res);
             }
         });
     }
 
-    actionEstate() {
-        this.display = true;
+    redirectUrlExternal(url) {
+        window.open(url, '_self');
     }
 
     showDialog() {
@@ -57,7 +58,26 @@ export class HomeComponent implements OnInit {
     }
 
     login() {
-        this.router.navigate(['admin']);
-        this.display = false;
+        this.userService.login(this.userLogin).subscribe(res => {
+            if (res['result']) {
+                const user = res['response'];
+                if (user) {
+                    this.appComponent.showToast(
+                        '¡¡¡Bienvenido!!!',
+                        user.name,
+                        'success');
+                    ConfigGlobal.setUserLogin(user);
+                    this.router.navigate(['admin']);
+                    this.display = false;
+                } else {
+                    this.appComponent.showToast(
+                        'Error',
+                        'Usuario o contraseña incorrecta',
+                        'error');
+                }
+            } else {
+                this.appComponent.showErrorService(res);
+            }
+        });
     }
 }

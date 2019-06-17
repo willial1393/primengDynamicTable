@@ -11,6 +11,8 @@ import {
     DialogModule,
     DropdownModule,
     EditorModule,
+    FileUploadModule,
+    InputTextareaModule,
     InputTextModule,
     MessageService,
     MultiSelectModule,
@@ -53,7 +55,9 @@ import {TableModule} from 'primeng/table';
         InputTextModule,
         PasswordModule,
         AppRoutingModule,
-        TableModule
+        TableModule,
+        FileUploadModule,
+        InputTextareaModule
     ],
     providers: [
         MessageService

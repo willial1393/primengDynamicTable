@@ -2,6 +2,8 @@
     <router-outlet></router-outlet>
 </div>
 
+<p-toast key="toast"></p-toast>
+
 <p-toast position="center" key="messageDialog" [modal]="true" [baseZIndex]="5000">
     <ng-template let-message pTemplate="message">
         <div style="text-align: center">
@@ -30,4 +32,14 @@
         </div>
     </ng-template>
 </p-toast>
+
+<p-dialog header="Ingresar" [(visible)]="displayLoading" [modal]="true" [responsive]="true"
+          [style]="{boxShadow:'none'}"
+          [maximizable]="false" [baseZIndex]="10000"
+          [showHeader]="false"
+          [contentStyle]="{height: '100%',borderColor: 'transparent',backgroundColor: 'transparent'}">
+    <div style="align-items: center;height: 100%;display: flex;justify-content: center;">
+        <img src="assets/images/preloader.svg" alt="" style="width: 200px; height: 200px">
+    </div>
+</p-dialog>
 

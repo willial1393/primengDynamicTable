@@ -14,13 +14,22 @@ export class AppComponent {
         backgroundColor: 'rgba(173,173,173,0.12)',
         color: 'white'
     };
+    displayLoading = false;
 
     constructor(private messageService: MessageService) {
-
     }
 
     closeMessage() {
         this.messageService.clear('messageDialog');
+    }
+
+    showToast(title: string, message: string, type: string) {
+        this.messageService.add({
+            key: 'toast',
+            severity: type,
+            summary: title,
+            detail: message
+        });
     }
 
     showMessage(title: string, message: string, type: string) {
@@ -32,12 +41,17 @@ export class AppComponent {
         });
     }
 
-    showErrorService(errorMessage: string) {
+    showErrorService(errorMessage) {
         this.messageService.add({
             key: 'messageDialog',
             severity: 'error',
             summary: '',
-            detail: errorMessage
+            detail: errorMessage['error'],
+            life: 60000
         });
+    }
+
+    showLoading(value: boolean) {
+        this.displayLoading = value;
     }
 }

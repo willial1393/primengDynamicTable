@@ -4,15 +4,16 @@
           [showHeader]="false"
           [dismissableMask]="true"
           [contentStyle]="{borderColor: 'transparent',backgroundColor: 'transparent'}">
-    <form ngNativeValidate (submit)="login()" class="text-center">
+    <form ngNativeValidate (ngSubmit)="login()" class="text-center">
+        {{userLogin|json}}
         <div class="ui-inputgroup">
             <span class="ui-inputgroup-addon"><i class="pi pi-user"></i></span>
-            <input type="text" pInputText placeholder="Usuario"
-                   [(ngModel)]="username" name="username">
+            <input type="text" pInputText placeholder="Usuario" required
+                   [(ngModel)]="userLogin.username" name="username">
         </div>
         <div class="ui-inputgroup">
             <span class="ui-inputgroup-addon"><i class="pi pi-key"></i></span>
-            <input type="password" pPassword [(ngModel)]="password" name="password"
+            <input type="password" pPassword [(ngModel)]="userLogin.password" name="password" required
                    placeholder="Contraseña"/>
         </div>
         <div class="ui-inputgroup">
@@ -26,16 +27,17 @@
 </div>
 
 <div class="row">
-    <div class="col-sm text-center">
-        <ng-container *ngFor="let p of projects">
+    <ng-container *ngFor="let p of projects">
+        <div class="col-sm text-center">
             <div class="div-component">
                 <p-card header="{{p.name}}" subheader="{{p.type}}"
                         [style]="styleCards"
                         styleClass="ui-card-shadow">
                     <p-header>
-                        <a href="{{p.url}}">
-                            <img src="{{p.image}}" alt="" style="width: 50%; height: 50%">
-                        </a>
+                        <div style="height: 200px; cursor: pointer" (click)="redirectUrlExternal(p.url)">
+                            <img src="{{p.image}}" alt=""
+                                 style="max-width:200px;max-height:200px;width:auto;height:auto;">
+                        </div>
                     </p-header>
                     <div>{{p.description}}</div>
                     <p-footer>
@@ -68,6 +70,6 @@
                     </p-table>
                 </p-dialog>
             </div>
-        </ng-container>
-    </div>
+        </div>
+    </ng-container>
 </div>

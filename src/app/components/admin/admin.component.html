@@ -1,7 +1,13 @@
-<p-table [columns]="cols" [value]="cars" selectionMode="single" [(selection)]="selectedCar"
-         (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="15">
+<div style="width: 100%; text-align: right">
+    <button pButton type="button" icon="pi pi-sign-out" label="Cerrar sesión"
+            (click)="logout()"
+            class="ui-button-secondary ui-button-rounded mb-3"></button>
+</div>
+<!--Table projects-->
+<p-table [columns]="cols" [value]="projects" selectionMode="single" [(selection)]="selectedProject"
+         (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="10">
     <ng-template pTemplate="caption">
-        List of Cars
+        Proyectos
     </ng-template>
     <ng-template pTemplate="header" let-columns>
         <tr>
@@ -13,62 +19,86 @@
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData">
-            <td *ngFor="let col of columns">
-                {{rowData[col.field]}}
+            <td *ngFor="let col of columns" class="text-center">
+                <ng-container *ngIf="col.type==='select'">
+                    {{rowData[col.field][col.label]}}
+                </ng-container>
+                <ng-container *ngIf="col.type==='image'">
+                    <img [src]="rowData[col.field]?getSantizeUrl(rowData[col.field]):''" alt=""
+                         style="max-width: 150px; max-height: 150px">
+                </ng-container>
+                <ng-container *ngIf="col.type==='text'">
+                    {{rowData[col.field]}}
+                </ng-container>
+                <ng-container *ngIf="col.type==='text-area'">
+                    {{rowData[col.field]}}
+                </ng-container>
             </td>
         </tr>
     </ng-template>
     <ng-template pTemplate="summary" let-rowData>
         <div style="text-align:left">
-            <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Add"></button>
+            <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Crear"></button>
         </div>
     </ng-template>
 </p-table>
-
-<p-dialog header="Car Details" [(visible)]="displayDialog" [responsive]="true" showEffect="pide" [modal]="true"
-          [style]="{width: '300px'}">
-    <div class="ui-g ui-fluid" *ngIf="car">
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="vin">Vin</label>
+<!--Form project-->
+<p-dialog header="Proyecto {{project?project.name:''}}" [(visible)]="displayDialog" [responsive]="true"
+          showEffect="pide"
+          [modal]="true" [style]="{maxWidth: '500px'}">
+    <div class="ui-g ui-fluid" *ngIf="project">
+        <ng-container *ngFor="let c of cols">
+            <div *ngIf="c.type === 'text'" class="ui-g-12">
+                <div class="ui-g-4">
+                    <label>{{c.header}}</label>
+                </div>
+                <div class="ui-g-8">
+                    <input pInputText [(ngModel)]="project[c.field]"/>
+                </div>
             </div>
-            <div class="ui-g-8">
-                <input pInputText id="vin" [(ngModel)]="car.vin"/>
+            <div *ngIf="c.type === 'text-area'" class="ui-g-12">
+                <div class="ui-g-4">
+                    <label>{{c.header}}</label>
+                </div>
+                <div class="ui-g-8">
+                    <textarea [(ngModel)]="project[c.field]" [rows]="5" [cols]="30" pInputTextarea
+                              autoResize="autoResize"></textarea>
+                </div>
             </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="year">Year</label>
+            <div *ngIf="c.type === 'image'" class="ui-g-12">
+                <div class="ui-g-4">
+                    <label>{{c.header}}</label>
+                </div>
+                <div class="ui-g-4">
+                    <img [src]="project[c.field]?getSantizeUrl(project[c.field]):''" alt=""
+                         style="max-width: 150px; max-height: 150px">
+                </div>
+                <div class="ui-g-4">
+                    <p-fileUpload #form name="myfile[]" accept="image/*" customUpload="true" [auto]="true"
+                                  (uploadHandler)="onUpload($event, project, form)"
+                                  chooseLabel="Seleccionar" mode="basic"></p-fileUpload>
+                </div>
             </div>
-            <div class="ui-g-8">
-                <input pInputText id="year" [(ngModel)]="car.year"/>
+            <div *ngIf="c.type === 'select'" class="ui-g-12">
+                <div class="ui-g-4">
+                    <label>{{c.header}}</label>
+                </div>
+                <div class="ui-g-8">
+                    <p-dropdown [options]="c.options" [(ngModel)]="project[c.field]" placeholder="Seleccionar"
+                                optionLabel="{{c.label}}" [showClear]="true"></p-dropdown>
+                </div>
             </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="brand">Brand</label>
-            </div>
-            <div class="ui-g-8">
-                <input pInputText id="brand" [(ngModel)]="car.brand"/>
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="color">Color</label>
-            </div>
-            <div class="ui-g-8">
-                <input pInputText id="color" [(ngModel)]="car.color"/>
-            </div>
-        </div>
+        </ng-container>
     </div>
+
     <p-footer>
         <div class="ui-dialog-buttonpane ui-helper-clearfix">
-            <button type="button" pButton icon="pi pi-trash" (click)="openToast()" label="Delete"></button>
-            <button type="button" pButton icon="pi pi-check" (click)="save()" label="Save"></button>
+            <button type="button" pButton icon="pi pi-trash" (click)="openToast()" label="Eliminar"></button>
+            <button type="button" pButton icon="pi pi-check" (click)="save()" label="Guardar"></button>
         </div>
     </p-footer>
 </p-dialog>
-
+<!--Confirm dialog delete-->
 <p-toast position="center" key="c" [modal]="true" [baseZIndex]="5000">
     <ng-template let-message pTemplate="message">
         <div style="text-align: center">

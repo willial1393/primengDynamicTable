@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {MessageService} from 'primeng/api';
-
-class Car {
-    vin: string;
-    year: string;
-    brand: string;
-    color: string;
-}
+import {ProjectService} from '../../services/project.service';
+import {Project} from '../../models/project';
+import {AppComponent} from '../../app.component';
+import {StateService} from '../../services/state.service';
+import {DomSanitizer} from '@angular/platform-browser';
+import {Router} from '@angular/router';
+import {ConfigGlobal} from '../../utilities/config-global';
 
 @Component({
     selector: 'app-admin',
@@ -16,20 +16,61 @@ class Car {
 export class AdminComponent implements OnInit {
 
     displayDialog: boolean;
+    project: Project = new Project();
+    selectedProject: Project;
+    newProject: boolean;
+    projects: Project[] = [];
+    cols: any[] = [];
 
-    car: Car = new Car();
-
-    selectedCar: Car;
-
-    newCar: boolean;
-
-    cars: Car[] = [];
-
-    cols: any[];
-
-    constructor(private messageService: MessageService) {
+    constructor(private messageService: MessageService,
+                private projectService: ProjectService,
+                private stateService: StateService,
+                private sanitizer: DomSanitizer,
+                private appComponent: AppComponent,
+                private route: Router) {
+        this.stateService.getAll().subscribe(res => {
+            if (res['result']) {
+                this.cols = [
+                    {field: 'name', header: 'Nombre', type: 'text', required: true},
+                    {field: 'type', header: 'Tipo', type: 'text', required: true},
+                    {field: 'image', header: 'Imagen', type: 'image', required: true},
+                    {field: 'url', header: 'Url', type: 'text', required: true},
+                    {field: 'description', header: 'Descripción', type: 'text-area', required: true},
+                    {
+                        field: 'state', header: 'Estado', type: 'select'
+                        , options: res['response'], label: 'name', required: true
+                    }
+                ];
+            } else {
+                this.appComponent.showErrorService(res);
+            }
+        });
+        this.loadProjects();
     }
 
+    ngOnInit() {
+    }
+
+    onUpload(event, project: Project, form) {
+        const reader = new FileReader();
+        reader.readAsDataURL(event.files[0]);
+        reader.onload = (_event) => {
+            project.image = reader.result.toString();
+        };
+        form.clear();
+    }
+
+    loadProjects() {
+        this.appComponent.showLoading(true);
+        this.projectService.getAll().subscribe(res => {
+            this.appComponent.showLoading(false);
+            if (res['result']) {
+                this.projects = res['response'];
+            } else {
+                this.appComponent.showErrorService(res);
+            }
+        });
+    }
 
     openToast() {
         this.messageService.add({
@@ -44,54 +85,62 @@ export class AdminComponent implements OnInit {
         this.messageService.clear('c');
     }
 
-    ngOnInit() {
-
-        this.cols = [
-            {field: 'vin', header: 'Vin'},
-            {field: 'year', header: 'Year'},
-            {field: 'brand', header: 'Brand'},
-            {field: 'color', header: 'Color'}
-        ];
-    }
-
     showDialogToAdd() {
-        this.newCar = true;
-        this.car = new Car();
+        this.newProject = true;
+        this.project = new Project();
         this.displayDialog = true;
     }
 
     save() {
-        const cars = [...this.cars];
-        if (this.newCar) {
-            cars.push(this.car);
-        } else {
-            cars[this.cars.indexOf(this.selectedCar)] = this.car;
-        }
-
-        this.cars = cars;
-        this.car = null;
         this.displayDialog = false;
+        this.project.state_id = this.project.state.id;
+        this.appComponent.showLoading(true);
+        this.projectService.store(this.project).subscribe(res => {
+            this.appComponent.showLoading(false);
+            if (res['result']) {
+                this.project = null;
+                this.loadProjects();
+            } else {
+                this.appComponent.showErrorService(res);
+            }
+        });
     }
 
     delete() {
-        const index = this.cars.indexOf(this.selectedCar);
-        this.cars = this.cars.filter((val, i) => i !== index);
-        this.car = null;
         this.displayDialog = false;
         this.closeToast();
+        this.appComponent.showLoading(true);
+        this.projectService.destroy(this.selectedProject).subscribe(res => {
+            this.appComponent.showLoading(false);
+            if (res['result']) {
+                this.loadProjects();
+            } else {
+                this.appComponent.showErrorService(res);
+            }
+        });
     }
 
     onRowSelect(event) {
-        this.newCar = false;
-        this.car = this.cloneCar(event.data);
+        this.newProject = false;
+        this.project = this.cloneProject(event.data);
         this.displayDialog = true;
     }
 
-    cloneCar(c: Car): Car {
-        const car = new Car();
-        for (const prop of Object.keys(c)) {
-            car[prop] = c[prop];
+    cloneProject(p: Project): Project {
+        const project = new Project();
+        for (const prop of Object.keys(p)) {
+            project[prop] = p[prop];
         }
-        return car;
+        return project;
+    }
+
+    public getSantizeUrl(url: string) {
+        return this.sanitizer.bypassSecurityTrustUrl(url);
+    }
+
+    logout() {
+        ConfigGlobal.setUserLogin(null);
+        this.route.navigate(['/']);
     }
 }
+
