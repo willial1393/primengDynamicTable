@@ -1,28 +1,28 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
-import {ConfigGlobal} from '../utilities/config-global';
 import {HttpClient} from '@angular/common/http';
 import {State} from '../models/state';
+import {AppGlobal} from '../utilities/app-global';
 
 @Injectable({
     providedIn: 'root'
 })
 export class StateService {
     url = environment.endpoint + 'states';
-    headers = ConfigGlobal.HEADERS;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient,
+                private appGlobal: AppGlobal) {
     }
 
     public getAll() {
-        return this.http.get(this.url, {headers: this.headers});
+        return this.http.get(this.url, {headers: this.appGlobal.headers});
     }
 
     public store(state: State) {
-        return this.http.post(this.url, state.getJson(), {headers: this.headers});
+        return this.http.post(this.url, state.getJson(), {headers: this.appGlobal.headers});
     }
 
     public destroy(state: State) {
-        return this.http.post(this.url + '/destroy', state.getJson(), {headers: this.headers});
+        return this.http.post(this.url + '/destroy', state.getJson(), {headers: this.appGlobal.headers});
     }
 }

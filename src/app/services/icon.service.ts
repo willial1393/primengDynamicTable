@@ -1,15 +1,15 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
-import {Module} from '../models/module';
+import {Icon} from '../models/icon';
 import {AppGlobal} from '../utilities/app-global';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ModuleService {
+export class IconService {
 
-    url = environment.endpoint + 'items';
+    url = environment.endpoint + 'icons';
 
     constructor(private http: HttpClient,
                 private appGlobal: AppGlobal) {
@@ -19,11 +19,11 @@ export class ModuleService {
         return this.http.get(this.url, {headers: this.appGlobal.headers});
     }
 
-    public store(module: Module) {
-        return this.http.post(this.url, module.getJson(), {headers: this.appGlobal.headers});
+    public store(icon: Icon) {
+        return this.http.post(this.url, icon.getJson(), {headers: this.appGlobal.headers});
     }
 
-    public destroy(module: Module) {
-        return this.http.post(this.url + '/destroy', module.getJson(), {headers: this.appGlobal.headers});
+    public destroy(icon: Icon) {
+        return this.http.post(this.url + '/destroy', icon.getJson(), {headers: this.appGlobal.headers});
     }
 }

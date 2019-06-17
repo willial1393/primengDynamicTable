@@ -8,7 +8,7 @@ import {MessageService} from 'primeng/api';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    title = 'landing-projects';
+    title = 'landing-items';
     public styleCards = {
         maxwidth: '300px',
         backgroundColor: 'rgba(173,173,173,0.12)',

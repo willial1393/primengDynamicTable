@@ -41,6 +41,10 @@ export class HomeComponent implements OnInit {
                     x.values = x.module.map(m => {
                         return {name: m.name, state: m.state.name};
                     });
+                    x.item = x.item.map(i => {
+                        i.icon = i.icon['code'];
+                        return i;
+                    });
                     return x;
                 });
             } else {

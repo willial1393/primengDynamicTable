@@ -27,13 +27,18 @@ import {HomeComponent} from './components/home/home.component';
 import {AdminComponent} from './components/admin/admin.component';
 import {AppRoutingModule} from './app-routing.module';
 import {TableModule} from 'primeng/table';
+import {ItemsComponent} from './components/items/items.component';
+import {ModulesComponent} from './components/modules/modules.component';
+import {AppGlobal} from './utilities/app-global';
 
 
 @NgModule({
     declarations: [
         AppComponent,
         HomeComponent,
-        AdminComponent
+        AdminComponent,
+        ItemsComponent,
+        ModulesComponent
     ],
     imports: [
         BrowserModule,
@@ -60,7 +65,8 @@ import {TableModule} from 'primeng/table';
         InputTextareaModule
     ],
     providers: [
-        MessageService
+        MessageService,
+        AppGlobal
     ],
     bootstrap: [AppComponent]
 })

@@ -86,6 +86,7 @@ export class AdminComponent implements OnInit {
     }
 
     showDialogToAdd() {
+        this.selectedProject = null;
         this.newProject = true;
         this.project = new Project();
         this.displayDialog = true;
@@ -158,6 +159,16 @@ export class AdminComponent implements OnInit {
             'success'
         );
         this.route.navigate(['/']);
+    }
+
+    items() {
+        ConfigGlobal.setProject(this.selectedProject);
+        this.route.navigate(['items']);
+    }
+
+    modules() {
+        ConfigGlobal.setProject(this.selectedProject);
+        this.route.navigate(['modules']);
     }
 }
 

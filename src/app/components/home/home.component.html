@@ -47,7 +47,6 @@
                 </p-card>
 
                 <p-dialog header="{{p.name}}" [(visible)]="p.displaystate" [style]="{maxWidth: '500px'}">
-                    <h3 class="first">Single Sort</h3>
                     <p-table [columns]="cols" [value]="p.values">
                         <ng-template pTemplate="header" let-columns>
                             <tr>
