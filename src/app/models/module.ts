@@ -6,4 +6,9 @@ export class Module {
     state_id: number;
     project_id: number;
     state: State;
+
+    getJson() {
+        delete this.state;
+        return this;
+    }
 }

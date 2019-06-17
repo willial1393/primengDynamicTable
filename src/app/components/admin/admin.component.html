@@ -4,100 +4,112 @@
             class="ui-button-secondary ui-button-rounded mb-3"></button>
 </div>
 <!--Table projects-->
-<p-table [columns]="cols" [value]="projects" selectionMode="single" [(selection)]="selectedProject"
-         (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="10">
-    <ng-template pTemplate="caption">
-        Proyectos
-    </ng-template>
-    <ng-template pTemplate="header" let-columns>
-        <tr>
-            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
-                {{col.header}}
-                <p-sortIcon [field]="col.field"></p-sortIcon>
-            </th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr [pSelectableRow]="rowData">
-            <td *ngFor="let col of columns" class="text-center">
-                <ng-container *ngIf="col.type==='select'">
-                    {{rowData[col.field][col.label]}}
-                </ng-container>
-                <ng-container *ngIf="col.type==='image'">
-                    <img [src]="rowData[col.field]?getSantizeUrl(rowData[col.field]):''" alt=""
-                         style="max-width: 150px; max-height: 150px">
-                </ng-container>
-                <ng-container *ngIf="col.type==='text'">
-                    {{rowData[col.field]}}
-                </ng-container>
-                <ng-container *ngIf="col.type==='text-area'">
-                    {{rowData[col.field]}}
-                </ng-container>
-            </td>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="summary" let-rowData>
-        <div style="text-align:left">
-            <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Crear"></button>
-        </div>
-    </ng-template>
-</p-table>
+<p-card>
+    <p-table [columns]="cols" [value]="projects" selectionMode="single" [(selection)]="selectedProject"
+             (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="10">
+        <ng-template pTemplate="caption">
+            Proyectos
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                    {{col.header}}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+                <td *ngFor="let col of columns" class="text-center">
+                    <ng-container *ngIf="col.type==='select'">
+                        {{rowData[col.field][col.label]}}
+                    </ng-container>
+                    <ng-container *ngIf="col.type==='image'">
+                        <img [src]="rowData[col.field]?getSantizeUrl(rowData[col.field]):''" alt=""
+                             style="max-width: 150px; max-height: 150px">
+                    </ng-container>
+                    <ng-container *ngIf="col.type==='text'">
+                        {{rowData[col.field]}}
+                    </ng-container>
+                    <ng-container *ngIf="col.type==='text-area'">
+                        {{rowData[col.field]}}
+                    </ng-container>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary" let-rowData>
+            <div style="text-align:left">
+                <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Crear"></button>
+            </div>
+        </ng-template>
+    </p-table>
+</p-card>
 <!--Form project-->
-<p-dialog header="Proyecto {{project?project.name:''}}" [(visible)]="displayDialog" [responsive]="true"
-          showEffect="pide"
-          [modal]="true" [style]="{maxWidth: '500px'}">
-    <div class="ui-g ui-fluid" *ngIf="project">
-        <ng-container *ngFor="let c of cols">
-            <div *ngIf="c.type === 'text'" class="ui-g-12">
-                <div class="ui-g-4">
-                    <label>{{c.header}}</label>
+<form ngNativeValidate (ngSubmit)="save()">
+    <p-dialog header="Proyecto {{project?project.name:''}}" [(visible)]="displayDialog" [responsive]="true"
+              showEffect="pide"
+              [modal]="true" [style]="{maxWidth: '500px'}">
+        <div class="ui-g ui-fluid" *ngIf="project">
+            <ng-container *ngFor="let c of cols">
+                <div *ngIf="c.type === 'text'" class="ui-g-12">
+                    <div class="ui-g-4">
+                        <label>{{c.header}}</label>
+                    </div>
+                    <div class="ui-g-8">
+                        <input pInputText [(ngModel)]="project[c.field]" [name]="c.field" [required]="c.required"/>
+                    </div>
                 </div>
-                <div class="ui-g-8">
-                    <input pInputText [(ngModel)]="project[c.field]"/>
-                </div>
-            </div>
-            <div *ngIf="c.type === 'text-area'" class="ui-g-12">
-                <div class="ui-g-4">
-                    <label>{{c.header}}</label>
-                </div>
-                <div class="ui-g-8">
+                <div *ngIf="c.type === 'text-area'" class="ui-g-12">
+                    <div class="ui-g-4">
+                        <label>{{c.header}}</label>
+                    </div>
+                    <div class="ui-g-8">
                     <textarea [(ngModel)]="project[c.field]" [rows]="5" [cols]="30" pInputTextarea
-                              autoResize="autoResize"></textarea>
+                              autoResize="autoResize" [name]="c.field" [required]="c.required"></textarea>
+                    </div>
                 </div>
-            </div>
-            <div *ngIf="c.type === 'image'" class="ui-g-12">
-                <div class="ui-g-4">
-                    <label>{{c.header}}</label>
+                <div *ngIf="c.type === 'image'" class="ui-g-12">
+                    <div class="ui-g-4">
+                        <label>{{c.header}}</label>
+                    </div>
+                    <div class="ui-g-4">
+                        <img [src]="project[c.field]?getSantizeUrl(project[c.field]):''" alt=""
+                             style="max-width: 150px; max-height: 150px">
+                    </div>
+                    <div class="ui-g-4">
+                        <p-fileUpload #form name="myfile[]" accept="image/*" customUpload="true" [auto]="true"
+                                      (uploadHandler)="onUpload($event, project, form)"
+                                      chooseLabel="Seleccionar" mode="basic"></p-fileUpload>
+                        <input type="text" style="height: 0; position: relative; top: -30px;z-index: -1"
+                               [required]="c.required"
+                               [(ngModel)]="project[c.field]"
+                               [name]="c.field">
+                    </div>
                 </div>
-                <div class="ui-g-4">
-                    <img [src]="project[c.field]?getSantizeUrl(project[c.field]):''" alt=""
-                         style="max-width: 150px; max-height: 150px">
+                <div *ngIf="c.type === 'select'" class="ui-g-12">
+                    <div class="ui-g-4">
+                        <label>{{c.header}}</label>
+                    </div>
+                    <div class="ui-g-8">
+                        <p-dropdown [options]="c.options" [(ngModel)]="project[c.field]" placeholder="Seleccionar"
+                                    optionLabel="{{c.label}}" [showClear]="true" [name]="c.field"></p-dropdown>
+                        <input type="text" style="height: 0; position: relative; top: -30px;z-index: -1"
+                               [required]="c.required"
+                               [(ngModel)]="project[c.field]"
+                               [name]="c.field">
+                    </div>
                 </div>
-                <div class="ui-g-4">
-                    <p-fileUpload #form name="myfile[]" accept="image/*" customUpload="true" [auto]="true"
-                                  (uploadHandler)="onUpload($event, project, form)"
-                                  chooseLabel="Seleccionar" mode="basic"></p-fileUpload>
-                </div>
-            </div>
-            <div *ngIf="c.type === 'select'" class="ui-g-12">
-                <div class="ui-g-4">
-                    <label>{{c.header}}</label>
-                </div>
-                <div class="ui-g-8">
-                    <p-dropdown [options]="c.options" [(ngModel)]="project[c.field]" placeholder="Seleccionar"
-                                optionLabel="{{c.label}}" [showClear]="true"></p-dropdown>
-                </div>
-            </div>
-        </ng-container>
-    </div>
-
-    <p-footer>
-        <div class="ui-dialog-buttonpane ui-helper-clearfix">
-            <button type="button" pButton icon="pi pi-trash" (click)="openToast()" label="Eliminar"></button>
-            <button type="button" pButton icon="pi pi-check" (click)="save()" label="Guardar"></button>
+            </ng-container>
         </div>
-    </p-footer>
-</p-dialog>
+
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="pi pi-trash" (click)="openToast()" label="Eliminar"></button>
+                <button type="submit" pButton icon="pi pi-check" label="Guardar"></button>
+            </div>
+        </p-footer>
+    </p-dialog>
+</form>
 <!--Confirm dialog delete-->
 <p-toast position="center" key="c" [modal]="true" [baseZIndex]="5000">
     <ng-template let-message pTemplate="message">

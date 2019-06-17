@@ -17,7 +17,7 @@ export class AdminComponent implements OnInit {
 
     displayDialog: boolean;
     project: Project = new Project();
-    selectedProject: Project;
+    selectedProject: any;
     newProject: boolean;
     projects: Project[] = [];
     cols: any[] = [];
@@ -92,14 +92,19 @@ export class AdminComponent implements OnInit {
     }
 
     save() {
-        this.displayDialog = false;
         this.project.state_id = this.project.state.id;
         this.appComponent.showLoading(true);
         this.projectService.store(this.project).subscribe(res => {
             this.appComponent.showLoading(false);
             if (res['result']) {
+                this.displayDialog = false;
                 this.project = null;
                 this.loadProjects();
+                this.appComponent.showToast(
+                    'Operación exitosa',
+                    'Proyecto guardado',
+                    'success'
+                );
             } else {
                 this.appComponent.showErrorService(res);
             }
@@ -110,10 +115,17 @@ export class AdminComponent implements OnInit {
         this.displayDialog = false;
         this.closeToast();
         this.appComponent.showLoading(true);
-        this.projectService.destroy(this.selectedProject).subscribe(res => {
+        const project: Project = new Project();
+        Object.assign(project, this.selectedProject);
+        this.projectService.destroy(project).subscribe(res => {
             this.appComponent.showLoading(false);
             if (res['result']) {
                 this.loadProjects();
+                this.appComponent.showToast(
+                    'Operación exitosa',
+                    'Proyecto eliminado',
+                    'success'
+                );
             } else {
                 this.appComponent.showErrorService(res);
             }
@@ -140,6 +152,11 @@ export class AdminComponent implements OnInit {
 
     logout() {
         ConfigGlobal.setUserLogin(null);
+        this.appComponent.showToast(
+            'Operación exitosa',
+            'Sesión cerrada',
+            'success'
+        );
         this.route.navigate(['/']);
     }
 }
