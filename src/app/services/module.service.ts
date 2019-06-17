@@ -9,7 +9,7 @@ import {AppGlobal} from '../utilities/app-global';
 })
 export class ModuleService {
 
-    url = environment.endpoint + 'items';
+    url = environment.endpoint + 'modules';
 
     constructor(private http: HttpClient,
                 private appGlobal: AppGlobal) {
