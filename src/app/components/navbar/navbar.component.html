@@ -1,9 +1,13 @@
 <div style="position: sticky; top: 0">
-  <p-menubar [model]="items">
-    <div>
-      <button class="ui-button-secondary" pButton label="Cerrar sesión"
-              icon="pi pi-sign-out" style="margin-left:.25em"
-              (click)="logout()"></button>
+  <p-menubar [model]="items" [autoDisplay]="false">
+    <div class="align-middle">
+      <span style="margin-right: 10px">{{username}}</span>
+      <img src="../../../assets/images/user.png" height="40" alt=""
+           (click)="op1.toggle($event)"/>
+      <p-overlayPanel #op1>
+        <button type="button" class="btn btn-light">Light</button>
+        <button type="button" class="btn btn-light" (click)="logout()">Cerrar sesión</button>
+      </p-overlayPanel>
     </div>
   </p-menubar>
 </div>

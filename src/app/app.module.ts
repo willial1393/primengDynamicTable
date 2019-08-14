@@ -18,6 +18,7 @@ import {
   MenubarModule,
   MessageService,
   MultiSelectModule,
+  OverlayPanelModule,
   PasswordModule,
   TabViewModule
 } from 'primeng/primeng';
@@ -68,7 +69,8 @@ import {NavbarComponent} from './components/navbar/navbar.component';
     FileUploadModule,
     InputTextareaModule,
     LightboxModule,
-    MenubarModule
+    MenubarModule,
+    OverlayPanelModule
   ],
     providers: [
         MessageService,
