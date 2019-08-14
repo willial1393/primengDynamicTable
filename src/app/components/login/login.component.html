@@ -1,0 +1,18 @@
+<div class="text-center">
+  <div class="card-login shadow-lg">
+    <img src="../../../assets/images/logo.png" width="200" style="margin-bottom: 30px"/>
+    <form ngNativeValidate (submit)="login()">
+      <div class="form-group ui-inputgroup">
+        <i class="pi pi-inbox"></i>
+        <input type="email" class="form-control" placeholder="Correo electrónico"
+               [(ngModel)]="email" name="email" required="">
+      </div>
+      <div class="form-group ui-inputgroup">
+        <i class="pi pi-key"></i>
+        <input type="password" class="form-control" placeholder="Contraseña"
+               [(ngModel)]="password" name="password" required="">
+      </div>
+      <button type="submit" class="btn btn-light">Ingresar</button>
+    </form>
+  </div>
+</div>
