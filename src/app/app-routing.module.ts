@@ -4,38 +4,21 @@ import {RouterModule, Routes} from '@angular/router';
 import {HomeComponent} from './components/home/home.component';
 import {AdminComponent} from './components/admin/admin.component';
 import {AuthGuardService} from './services/auth-guard.service';
-import {ItemsComponent} from './components/items/items.component';
-import {ModulesComponent} from './components/modules/modules.component';
+import {LoginComponent} from './components/login/login.component';
 // AuthGuardService
 // https://medium.com/@ryanchenkie_40935/angular-authentication-using-route-guards-bf7a4ca13ae3
 const appRoutes: Routes = [
-    {
-        path: '',
-        component: HomeComponent
-    },
-    {
-        path: 'admin',
-        component: AdminComponent,
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'items',
-        component: ItemsComponent,
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'modules',
-        component: ModulesComponent,
-        canActivate: [AuthGuardService]
-    }
+  {path: '', component: LoginComponent},
+  {path: 'home', component: HomeComponent, canActivate: [AuthGuardService]},
+  {path: 'admin', component: AdminComponent, canActivate: [AuthGuardService]}
 ];
 
 @NgModule({
-    declarations: [],
-    imports: [
-        CommonModule,
-        RouterModule.forRoot(appRoutes),
-    ]
+  declarations: [],
+  imports: [
+    CommonModule,
+    RouterModule.forRoot(appRoutes),
+  ]
 })
 export class AppRoutingModule {
 }

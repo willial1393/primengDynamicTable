@@ -1,28 +1,12 @@
-import {User} from '../models/user';
-import {Project} from '../models/project';
+import {HttpHeaders} from '@angular/common/http';
 
 export class ConfigGlobal {
 
-    constructor() {
-    }
+  static HEADERS = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'api-key': '044dbfe4fdd593c6e1b5a42d4ed1920832b2e1f14a1f12ea8253a6f51afdb584'
+  });
 
-    // login
-    public static getUserLogin(): User {
-        return JSON.parse(localStorage.getItem('login'));
-    }
-
-    public static setUserLogin(user: User) {
-        localStorage.setItem('login', JSON.stringify(user));
-    }
-
-    // project
-    public static getProject(): Project {
-        return JSON.parse(localStorage.getItem('project'));
-    }
-
-    public static setProject(project: Project) {
-        localStorage.setItem('project', JSON.stringify(project));
-    }
 
 
 }

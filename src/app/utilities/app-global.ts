@@ -1,10 +1,14 @@
 import {Injectable} from '@angular/core';
-import {HttpHeaders} from '@angular/common/http';
+import {Usuario} from '../models/usuario';
 
 @Injectable()
 export class AppGlobal {
-    headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        'api-key': 'base64:hiABIxt3cOrfVFWu3uXgB/TAtXkNW4PegtGxOxhLVsw='
-    });
+  // login
+  public static getUserLogin(): Usuario {
+    return JSON.parse(localStorage.getItem('login'));
+  }
+
+  public static setUserLogin(user: Usuario) {
+    localStorage.setItem('login', JSON.stringify(user));
+  }
 }

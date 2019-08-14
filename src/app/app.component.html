@@ -1,45 +1,46 @@
+<app-navbar *ngIf="showNavbar"></app-navbar>
 <div style="margin: 15px">
-    <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </div>
 
 <p-toast key="toast"></p-toast>
 
 <p-toast position="center" key="messageDialog" [modal]="true" [baseZIndex]="5000">
-    <ng-template let-message pTemplate="message">
-        <div style="text-align: center">
-            <ng-container *ngIf="message.severity === 'success'">
-                <i class="pi pi-check-circle" style="font-size: 3em"></i>
-            </ng-container>
-            <ng-container *ngIf="message.severity === 'warn'">
-                <i class="pi pi-exclamation-triangle" style="font-size: 3em"></i>
-            </ng-container>
-            <ng-container *ngIf="message.severity === 'info'">
-                <i class="pi pi-info-circle" style="font-size: 3em"></i>
-            </ng-container>
-            <ng-container *ngIf="message.severity === 'error'">
-                <i class="pi pi-times-circle" style="font-size: 3em"></i>
-            </ng-container>
-            <h3>{{message.summary}}</h3>
-            <p>{{message.detail}}</p>
-        </div>
-        <div class="ui-g ui-fluid">
-            <div class="ui-g-3"></div>
-            <div class="ui-g-6">
-                <button type="button" pButton (click)="closeMessage()" label="Cerrar"
-                        class="ui-button-secondary"></button>
-            </div>
-            <div class="ui-g-3"></div>
-        </div>
-    </ng-template>
+  <ng-template let-message pTemplate="message">
+    <div style="text-align: center">
+      <ng-container *ngIf="message.severity === 'success'">
+        <i class="pi pi-check-circle" style="font-size: 3em"></i>
+      </ng-container>
+      <ng-container *ngIf="message.severity === 'warn'">
+        <i class="pi pi-exclamation-triangle" style="font-size: 3em"></i>
+      </ng-container>
+      <ng-container *ngIf="message.severity === 'info'">
+        <i class="pi pi-info-circle" style="font-size: 3em"></i>
+      </ng-container>
+      <ng-container *ngIf="message.severity === 'error'">
+        <i class="pi pi-times-circle" style="font-size: 3em"></i>
+      </ng-container>
+      <h3>{{message.summary}}</h3>
+      <p>{{message.detail}}</p>
+    </div>
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-3"></div>
+      <div class="ui-g-6">
+        <button type="button" pButton (click)="closeMessage()" label="Cerrar"
+                class="ui-button-secondary"></button>
+      </div>
+      <div class="ui-g-3"></div>
+    </div>
+  </ng-template>
 </p-toast>
 
-<p-dialog header="Ingresar" [(visible)]="displayLoading" [modal]="true" [responsive]="true"
+<p-dialog [(visible)]="displayLoading" [modal]="true" [responsive]="true"
           [style]="{boxShadow:'none'}"
           [maximizable]="false" [baseZIndex]="10000"
           [showHeader]="false"
           [contentStyle]="{height: '100%',borderColor: 'transparent',backgroundColor: 'transparent'}">
-    <div style="align-items: center;height: 100%;display: flex;justify-content: center;">
-        <img src="assets/images/preloader.svg" alt="" style="width: 200px; height: 200px">
-    </div>
+  <div style="align-items: center;height: 100%;display: flex;justify-content: center;">
+    <img src="assets/images/preloader.svg" alt="" style="width: 200px; height: 200px">
+  </div>
 </p-dialog>
 

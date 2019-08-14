@@ -1,20 +1,20 @@
 import {Injectable} from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
-import {ConfigGlobal} from '../utilities/config-global';
+import {AppGlobal} from '../utilities/app-global';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AuthGuardService implements CanActivate {
 
-    constructor(public router: Router) {
-    }
+  constructor(public router: Router) {
+  }
 
-    canActivate(): boolean {
-        if (!ConfigGlobal.getUserLogin()) {
-            this.router.navigate(['/']);
-            return false;
-        }
-        return true;
+  canActivate(): boolean {
+    if (!AppGlobal.getUserLogin()) {
+      this.router.navigate(['/']);
+      return false;
     }
+    return true;
+  }
 }

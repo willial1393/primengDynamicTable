@@ -7,17 +7,19 @@ import {CardModule} from 'primeng/card';
 import {ButtonModule} from 'primeng/button';
 import {SplitButtonModule} from 'primeng/splitbutton';
 import {
-    CodeHighlighterModule,
-    DialogModule,
-    DropdownModule,
-    EditorModule,
-    FileUploadModule,
-    InputTextareaModule,
-    InputTextModule,
-    MessageService,
-    MultiSelectModule,
-    PasswordModule,
-    TabViewModule
+  CodeHighlighterModule,
+  DialogModule,
+  DropdownModule,
+  EditorModule,
+  FileUploadModule,
+  InputTextareaModule,
+  InputTextModule,
+  LightboxModule,
+  MenubarModule,
+  MessageService,
+  MultiSelectModule,
+  PasswordModule,
+  TabViewModule
 } from 'primeng/primeng';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
@@ -27,9 +29,10 @@ import {HomeComponent} from './components/home/home.component';
 import {AdminComponent} from './components/admin/admin.component';
 import {AppRoutingModule} from './app-routing.module';
 import {TableModule} from 'primeng/table';
-import {ItemsComponent} from './components/items/items.component';
-import {ModulesComponent} from './components/modules/modules.component';
 import {AppGlobal} from './utilities/app-global';
+import {LoginComponent} from './components/login/login.component';
+import {DynamicTableComponent} from './components/dynamic-table/dynamic-table.component';
+import {NavbarComponent} from './components/navbar/navbar.component';
 
 
 @NgModule({
@@ -37,33 +40,36 @@ import {AppGlobal} from './utilities/app-global';
         AppComponent,
         HomeComponent,
         AdminComponent,
-        ItemsComponent,
-        ModulesComponent
+      LoginComponent,
+      DynamicTableComponent,
+      NavbarComponent
     ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        HttpClientModule,
-        CardModule,
-        ButtonModule,
-        SplitButtonModule,
-        CommonModule,
-        DropdownModule,
-        SplitButtonModule,
-        ToastModule,
-        TabViewModule,
-        CodeHighlighterModule,
-        MultiSelectModule,
-        EditorModule,
-        DialogModule,
-        InputTextModule,
-        PasswordModule,
-        AppRoutingModule,
-        TableModule,
-        FileUploadModule,
-        InputTextareaModule
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    HttpClientModule,
+    CardModule,
+    ButtonModule,
+    SplitButtonModule,
+    CommonModule,
+    DropdownModule,
+    SplitButtonModule,
+    ToastModule,
+    TabViewModule,
+    CodeHighlighterModule,
+    MultiSelectModule,
+    EditorModule,
+    DialogModule,
+    InputTextModule,
+    PasswordModule,
+    AppRoutingModule,
+    TableModule,
+    FileUploadModule,
+    InputTextareaModule,
+    LightboxModule,
+    MenubarModule
+  ],
     providers: [
         MessageService,
         AppGlobal
