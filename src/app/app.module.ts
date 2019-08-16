@@ -27,23 +27,23 @@ import {HttpClientModule} from '@angular/common/http';
 import {ToastModule} from 'primeng/toast';
 import {CommonModule} from '@angular/common';
 import {HomeComponent} from './components/home/home.component';
-import {AdminComponent} from './components/admin/admin.component';
 import {AppRoutingModule} from './app-routing.module';
 import {TableModule} from 'primeng/table';
 import {AppGlobal} from './utilities/app-global';
 import {LoginComponent} from './components/login/login.component';
 import {DynamicTableComponent} from './components/dynamic-table/dynamic-table.component';
 import {NavbarComponent} from './components/navbar/navbar.component';
+import {RepuestosComponent} from './components/repuestos/repuestos.component';
 
 
 @NgModule({
     declarations: [
         AppComponent,
         HomeComponent,
-        AdminComponent,
       LoginComponent,
       DynamicTableComponent,
-      NavbarComponent
+      NavbarComponent,
+      RepuestosComponent
     ],
   imports: [
     BrowserModule,

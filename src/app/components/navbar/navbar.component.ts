@@ -24,7 +24,10 @@ export class NavbarComponent implements OnInit {
       {
         label: 'Repuestos',
         items: [
-          {label: 'Registro Repuestos'},
+          {
+            label: 'Registro Repuestos',
+            routerLink: 'repuestos'
+          },
           {label: 'Kardex Repuestos'}
         ]
       },
