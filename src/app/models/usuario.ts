@@ -1,5 +1,3 @@
-import {TipoUsuario} from './tipo-usuario';
-
 export class Usuario {
   id_usuario: number;
   id_tipo_usuario: number;
@@ -9,5 +7,4 @@ export class Usuario {
   estado: string;
   tipo: string;
   notificaciones: string;
-  tipo_usuario: TipoUsuario;
 }

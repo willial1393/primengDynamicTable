@@ -1,0 +1,32 @@
+[
+  {
+    "id_usuario": 1,
+    "id_tipo_usuario": 1,
+    "correo_electronico": "admin@admin.com",
+    "nombre": "ADMIN",
+    "clave": "admin",
+    "estado": "ACTIVO",
+    "tipo": "ADMINISTRADOR",
+    "notificaciones": "28"
+  },
+  {
+    "id_usuario": 2,
+    "id_tipo_usuario": 1,
+    "correo_electronico": "admin2@admin2.com",
+    "nombre": "ADMIN2",
+    "clave": "admin2",
+    "estado": "INACTIVO",
+    "tipo": "ADMINISTRADOR",
+    "notificaciones": "5"
+  },
+  {
+    "id_usuario": 3,
+    "id_tipo_usuario": 1,
+    "correo_electronico": "admin3@admin3.com",
+    "nombre": "ADMIN3",
+    "clave": "admin3",
+    "estado": "ACTIVO",
+    "tipo": "ADMINISTRADOR",
+    "notificaciones": "0"
+  }
+]

@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-  endpoint: 'http://toolboxcenter-api.test/api/'
+  endpoint: ''
 };
 
 /*

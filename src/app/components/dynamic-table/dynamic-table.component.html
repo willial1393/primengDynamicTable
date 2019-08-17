@@ -1,44 +1,93 @@
 <!--Table-->
-<p-card>
-  <p-table [columns]="cols" [value]="data" selectionMode="single" [(selection)]="selectedRow"
-           (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="10">
-    <ng-template pTemplate="caption">
-      Proyectos
-    </ng-template>
-    <ng-template pTemplate="header" let-columns>
-      <tr>
-        <th *ngFor="let col of columns" [pSortableColumn]="col.field">
-          {{col.header}}
-          <p-sortIcon [field]="col.field"></p-sortIcon>
-        </th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-rowData let-columns="columns">
-      <tr [pSelectableRow]="rowData">
-        <td *ngFor="let col of columns" class="text-center">
-          <ng-container *ngIf="col.type==='select'">
-            {{rowData[col.field][col.label]}}
-          </ng-container>
-          <ng-container *ngIf="col.type==='image'">
-            <img [src]="rowData[col.field]?getSantizeUrl(rowData[col.field]):''" alt=""
-                 style="max-width: 150px; max-height: 150px">
-          </ng-container>
-          <ng-container *ngIf="col.type==='text'">
-            {{rowData[col.field]}}
-          </ng-container>
-          <ng-container *ngIf="col.type==='text-area'">
-            {{rowData[col.field]}}
-          </ng-container>
-        </td>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="summary" let-rowData>
-      <div style="text-align:left">
-        <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Crear"></button>
+<p-table #dt [columns]="cols" [value]="data" selectionMode="single" [(selection)]="selectedRow" [responsive]="true"
+         (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="10" [resizableColumns]="true"
+         [customSort]="true" (sortFunction)="sortNumber($event)">
+  <ng-template pTemplate="caption">
+    <div class="row">
+      <div class="col" style="text-align: left">
+        <p-button icon="pi pi-file" label="Descargar Excel" (click)="export(dt)"></p-button>
       </div>
-    </ng-template>
-  </p-table>
-</p-card>
+      <div class="col" style="text-align: right">
+        <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+        <input type="text" pInputText size="50" placeholder="Buscar"
+               (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn>
+        {{col.header}}
+        <p-sortIcon [field]="col.field"></p-sortIcon>
+      </th>
+    </tr>
+    <tr>
+      <th *ngFor="let col of columns" [ngSwitch]="col.type">
+        <input *ngSwitchCase="'text'" style="width: 100%" pInputText type="text"
+               (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
+        <input *ngSwitchCase="'text-area'" style="width: 100%" pInputText type="text"
+               (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
+        <div *ngSwitchCase="'number'">
+          Rango: {{(col.values ? col.values[0] : '')}} - {{(col.values ? col.values[1] : '') }}
+          <i class="fa fa-close" (click)="col.values=null;dt.filter(null, col.field, col.filterMatchMode)"
+             style="cursor:pointer" *ngIf="col.values"></i>
+          <p-slider [style]="{'width':'100%','margin-top':'8px'}" [(ngModel)]="col.values" [range]="true"
+                    [min]="col.min" [max]="col.max"
+                    (onSlideEnd)="onFilterNumberChange($event, dt, col)"></p-slider>
+        </div>
+        <div *ngSwitchCase="'money'">
+          Rango: {{(col.values ? col.values[0] : 0) | currency:'':'symbol':'1.0' }}
+          - {{(col.values ? col.values[1] : 0) | currency:'':'symbol':'1.0'}}
+          <i class="fa fa-close" (click)="col.values=null;dt.filter(null, col.field, col.filterMatchMode)"
+             style="cursor:pointer" *ngIf="col.values"></i>
+          <p-slider [style]="{'width':'100%','margin-top':'8px'}" [(ngModel)]="col.values" [range]="true"
+                    [min]="col.min" [max]="col.max"
+                    (onSlideEnd)="onFilterNumberChange($event, dt, col)"></p-slider>
+        </div>
+        <p-dropdown *ngSwitchCase="'select'" [options]="col.options" [optionLabel]="col.label"
+                    [style]="{'width':'100%'}" appendTo="body"
+                    (onChange)="onFilterSelectChange($event, dt, col)"></p-dropdown>
+        <p-multiSelect *ngSwitchCase="'multiselect'" [options]="col.options" [optionLabel]="col.label"
+                       [defaultLabel]="defaultLabel" appendTo="body" [style]="{'width':'100%'}"
+                       selectedItemsLabel="{0} items seleccionados"
+                       (onChange)="onFilterMultiselectChange($event, dt, col)"></p-multiSelect>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-columns="columns">
+    <tr [pSelectableRow]="rowData">
+      <td *ngFor="let col of columns" class="text-center">
+        <ng-container *ngIf="col.type==='select'">
+          {{rowData[col.field] != null ? rowData[col.field][col.label] : ''}}
+        </ng-container>
+        <ng-container *ngIf="col.type==='multiselect'">
+          {{rowData[col.field] != null ? rowData[col.field][col.label] : ''}}
+        </ng-container>
+        <ng-container *ngIf="col.type==='image'">
+          <img [src]="rowData[col.field]?getSantizeUrl(rowData[col.field]):''" alt=""
+               style="max-width: 150px; max-height: 150px">
+        </ng-container>
+        <ng-container *ngIf="col.type==='text'">
+          {{rowData[col.field]}}
+        </ng-container>
+        <ng-container *ngIf="col.type==='number'">
+          {{rowData[col.field]}}
+        </ng-container>
+        <ng-container *ngIf="col.type==='money'">
+          {{rowData[col.field] | currency:'':'symbol':'1.0'}}
+        </ng-container>
+        <ng-container *ngIf="col.type==='text-area'">
+          {{rowData[col.field]}}
+        </ng-container>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary" let-rowData>
+    <div style="text-align:left">
+      <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Crear"></button>
+    </div>
+  </ng-template>
+</p-table>
 <!--Form-->
 <form ngNativeValidate (ngSubmit)="save()">
   <p-dialog header="Proyecto {{row?row.name:''}}" [(visible)]="displayDialog" [responsive]="true"
@@ -54,6 +103,23 @@
           </div>
           <div class="ui-g-8">
             <input pInputText [(ngModel)]="row[c.field]" [name]="c.field" [required]="c.required"/>
+          </div>
+        </div>
+        <div *ngIf="c.type === 'number'" class="ui-g-12">
+          <div class="ui-g-4">
+            <label>{{c.header}}</label>
+          </div>
+          <div class="ui-g-8">
+            <input pInputText type="number" [(ngModel)]="row[c.field]" [name]="c.field" [required]="c.required"/>
+          </div>
+        </div>
+        <div *ngIf="c.type === 'money'" class="ui-g-12">
+          <div class="ui-g-4">
+            <label>{{c.header}}</label>
+          </div>
+          <div class="ui-g-8">
+            <input pInputText type="text" currencyMask [options]="optionsCurrencyMask" [(ngModel)]="row[c.field]"
+                   [name]="c.field" [required]="c.required"/>
           </div>
         </div>
         <div *ngIf="c.type === 'text-area'" class="ui-g-12">
@@ -84,6 +150,19 @@
           </div>
         </div>
         <div *ngIf="c.type === 'select'" class="ui-g-12">
+          <div class="ui-g-4">
+            <label>{{c.header}}</label>
+          </div>
+          <div class="ui-g-8">
+            <p-dropdown [options]="c.options" [(ngModel)]="row[c.field]" placeholder="Seleccionar"
+                        optionLabel="{{c.label}}" [showClear]="true" [name]="c.field"></p-dropdown>
+            <input type="text" style="height: 0; position: relative; top: -30px;z-index: -1"
+                   [required]="c.required"
+                   [(ngModel)]="row[c.field]"
+                   [name]="c.field">
+          </div>
+        </div>
+        <div *ngIf="c.type === 'multiselect'" class="ui-g-12">
           <div class="ui-g-4">
             <label>{{c.header}}</label>
           </div>

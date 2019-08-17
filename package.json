@@ -21,6 +21,8 @@
     "@angular/platform-browser-dynamic": "~8.0.0",
     "@angular/router": "~8.0.0",
     "chart.js": "^2.8.0",
+    "export-from-json": "^1.1.4",
+    "ngx-currency-mask": "^4.3.2",
     "primeicons": "^1.0.0",
     "primeng": "^8.0.0-rc.1",
     "quill": "^1.3.6",

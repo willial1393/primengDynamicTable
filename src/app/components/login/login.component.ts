@@ -12,6 +12,7 @@ import {AppGlobal} from '../../utilities/app-global';
 })
 export class LoginComponent implements OnInit {
 
+  usuarios: Usuario[];
   password: string;
   email: string;
 
@@ -25,21 +26,20 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.app.showLoading(true);
-    this.usuarioService.login(this.email, this.password).subscribe(value => {
-      if (value['result']) {
-        const usuario: Usuario = value['response'];
-        if (usuario) {
-          AppGlobal.setUserLogin(usuario);
-          this.router.navigate(['home']);
-          this.app.showToast(`¡¡¡Bienvenido ${usuario.nombre}!!!`, '', 'success');
-        } else {
-          this.app.showMessage('Usuario o contraseña incorrecta', '', 'warn');
-        }
+    this.usuarioService.getAll().subscribe(value => {
+      this.usuarios = [];
+      Array.prototype.push.apply(this.usuarios, value);
+      const usuario: Usuario = this.usuarios.find(x =>
+        x.correo_electronico === this.email &&
+        x.clave === this.password
+      );
+      if (usuario) {
+        AppGlobal.setUserLogin(usuario);
+        this.router.navigate(['home']);
+        this.app.showToast(`¡¡¡Bienvenido ${usuario.nombre}!!!`, '', 'success');
       } else {
-        this.app.showErrorService(value);
+        this.app.showMessage('Usuario o contraseña incorrecta', '', 'warn');
       }
-    }, error => {
-      this.app.showErrorCatch(error);
     });
   }
 

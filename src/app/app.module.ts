@@ -20,6 +20,7 @@ import {
   MultiSelectModule,
   OverlayPanelModule,
   PasswordModule,
+  SliderModule,
   TabViewModule
 } from 'primeng/primeng';
 import {FormsModule} from '@angular/forms';
@@ -33,18 +34,19 @@ import {AppGlobal} from './utilities/app-global';
 import {LoginComponent} from './components/login/login.component';
 import {DynamicTableComponent} from './components/dynamic-table/dynamic-table.component';
 import {NavbarComponent} from './components/navbar/navbar.component';
-import {RepuestosComponent} from './components/repuestos/repuestos.component';
+import {UsuariosComponent} from './components/usuarios/usuarios.component';
+import {CurrencyMaskModule} from 'ngx-currency-mask';
 
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        HomeComponent,
-      LoginComponent,
-      DynamicTableComponent,
-      NavbarComponent,
-      RepuestosComponent
-    ],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    LoginComponent,
+    DynamicTableComponent,
+    NavbarComponent,
+    UsuariosComponent
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -70,13 +72,15 @@ import {RepuestosComponent} from './components/repuestos/repuestos.component';
     InputTextareaModule,
     LightboxModule,
     MenubarModule,
-    OverlayPanelModule
+    OverlayPanelModule,
+    SliderModule,
+    CurrencyMaskModule
   ],
-    providers: [
-        MessageService,
-        AppGlobal
-    ],
-    bootstrap: [AppComponent]
+  providers: [
+    MessageService,
+    AppGlobal
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }

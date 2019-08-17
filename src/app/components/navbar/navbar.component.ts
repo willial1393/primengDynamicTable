@@ -3,6 +3,7 @@ import {MenuItem} from 'primeng/api';
 import {AppGlobal} from '../../utilities/app-global';
 import {Router} from '@angular/router';
 import {AppComponent} from '../../app.component';
+import {Usuario} from '../../models/usuario';
 
 @Component({
   selector: 'app-navbar',
@@ -11,10 +12,11 @@ import {AppComponent} from '../../app.component';
 })
 export class NavbarComponent implements OnInit {
   items: MenuItem[];
-  username: string;
+  usuario: Usuario;
 
   constructor(private router: Router,
               private app: AppComponent) {
+    this.usuario = AppGlobal.getUserLogin();
     this.items = [
       {
         label: 'Inicio',
@@ -22,46 +24,17 @@ export class NavbarComponent implements OnInit {
       },
       {separator: true},
       {
-        label: 'Repuestos',
-        items: [
-          {
-            label: 'Registro Repuestos',
-            routerLink: 'repuestos'
-          },
-          {label: 'Kardex Repuestos'}
-        ]
+        label: 'Usuarios',
+        routerLink: 'usuarios'
       },
       {
-        label: 'Servicios',
-        items: [
-          {label: 'Registrar Equipo'},
-          {label: 'Servicios Pendientes'},
-          {label: 'Consultar Servicios'}
-        ]
-      },
-      {
-        label: 'Clientes',
-        items: [
-          {label: 'Registro Clientes'},
-          {label: 'Registro Empresas'}
-        ]
-      },
-      {
-        label: 'Empleados',
-        items: [
-          {label: 'Registro Empleados'},
-          {label: 'Roles y Permisos'}
-        ]
-      },
-      {
-        label: '0',
+        label: this.usuario.notificaciones,
         icon: 'pi pi-fw pi-bell'
       }
     ];
   }
 
   ngOnInit() {
-    this.username = AppGlobal.getUserLogin().nombre;
   }
 
   logout() {
