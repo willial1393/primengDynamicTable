@@ -220,7 +220,12 @@ export class DynamicTableComponent implements OnInit, OnChanges {
         if (isNumeric(value1)) {
           result = (Number(value1) < Number(value2)) ? -1 : (Number(value1) > Number(value2)) ? 1 : 0;
         } else {
-          result = value1.localeCompare(value2);
+          try {
+            result = value1.localeCompare(value2);
+          } catch (e) {
+            const label = this.cols.find(x => x.field === $event.field).label;
+            result = value1[label].localeCompare(value2[label]);
+          }
         }
       }
 

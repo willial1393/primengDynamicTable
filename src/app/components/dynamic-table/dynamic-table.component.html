@@ -17,10 +17,14 @@
   </ng-template>
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn pReorderableColumn>
-        {{col.header}}
-        <p-sortIcon [field]="col.field"></p-sortIcon>
-      </th>
+      <ng-container *ngFor="let col of columns">
+        <th *ngIf="col.type !== 'multiselect'" [pSortableColumn]="col.field" pResizableColumn
+            pReorderableColumn>
+          {{col.header}}
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </th>
+        <th *ngIf="col.type === 'multiselect'"></th>
+      </ng-container>
     </tr>
     <tr>
       <th *ngFor="let col of columns" [ngSwitch]="col.type">
