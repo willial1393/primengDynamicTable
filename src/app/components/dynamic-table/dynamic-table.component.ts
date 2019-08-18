@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MessageService} from 'primeng/api';
 import {DomSanitizer} from '@angular/platform-browser';
 import exportFromJSON from 'export-from-json';
@@ -10,10 +10,12 @@ import {isNumeric} from 'rxjs/internal-compatibility';
   templateUrl: './dynamic-table.component.html',
   styleUrls: ['./dynamic-table.component.css']
 })
-export class DynamicTableComponent implements OnInit {
+export class DynamicTableComponent implements OnInit, OnChanges {
 
   @Input() cols: any[];
+
   @Input() data: any[];
+
   // tslint:disable-next-line:no-output-on-prefix
   @Output() onStoreRow = new EventEmitter<any>();
   // tslint:disable-next-line:no-output-on-prefix
@@ -36,7 +38,7 @@ export class DynamicTableComponent implements OnInit {
     //   {field: 'image', header: 'Imagen', type: 'image', required: true},
     //   {field: 'url', header: 'Url', type: 'text', required: true},
     //   {field: 'url', header: 'Url', type: 'number', required: true},
-    //   {field: 'url', header: 'Url', type: 'money', required: true},
+    //   {field: 'url', header: 'Url', type: 'currency', required: true},
     //   {field: 'description', header: 'Descripción', type: 'text-area', required: true},
     //   {
     //     field: 'state', header: 'Estado', type: 'select'
@@ -49,25 +51,31 @@ export class DynamicTableComponent implements OnInit {
     // ];
   }
 
-  ngOnInit() {
-    setTimeout(() => {
-      for (const col of this.cols) {
-        if (col.type === 'number' || col.type === 'money') {
-          const values: number[] = this.data.map((x) => {
-            return x[col.field];
-          });
-          col.min = Math.min(...values);
-          col.max = Math.max(...values);
-          col.values = [col.min, col.max];
-        }
-        if (col.type === 'select') {
-          const obj = {};
-          obj[col.label] = this.defaultLabel;
-          col.options = [obj].concat(col.options);
-          this.objectsData.push(col);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] || changes['cols']) {
+      if (this.cols) {
+        for (const col of this.cols) {
+          if (col.type === 'number' || col.type === 'currency') {
+            const values: number[] = this.data.map((x) => {
+              return x[col.field];
+            });
+            col.min = Math.min(...values);
+            col.max = Math.max(...values);
+            col.values = [col.min, col.max];
+          }
+          if (col.type === 'select') {
+            const obj = {};
+            obj[col.label] = this.defaultLabel;
+            col.options = [obj].concat(col.options);
+            this.objectsData.push(col);
+          }
         }
       }
-    }, 1000);
+
+    }
+  }
+
+  ngOnInit() {
   }
 
   onFilterNumberChange($event, dt, col) {
@@ -92,16 +100,29 @@ export class DynamicTableComponent implements OnInit {
 
   onFilterMultiselectChange($event, dt, col) {
     if ($event.value) {
-      if ($event.value[col.label] === this.defaultLabel) {
-        dt.filter(null, col.field + '.' + col.label, 'in');
+      if ($event.value.length === 0) {
+        dt.filteredValue = dt._value;
       } else {
-        dt.filter($event.value.map((x) => {
-          return x[col.label];
-        }), col.field + '.' + col.label, 'in');
+        dt.filteredValue = dt._value.filter(x => this.searchObjects(x, $event.value, col));
       }
     } else {
-      dt.filter(null, col.field, 'in');
+      dt.filteredValue = dt._value;
     }
+  }
+
+  searchObjects(listX: any[], listY: any[], col: any): boolean {
+    if (listX) {
+      if (listX[col.field]) {
+        for (const x of listX[col.field]) {
+          for (const y of listY) {
+            if (x[col.label] === y[col.label]) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+    return false;
   }
 
   onUpload(event, row: any, form) {

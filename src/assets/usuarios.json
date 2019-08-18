@@ -7,7 +7,51 @@
     "clave": "admin",
     "estado": "ACTIVO",
     "tipo": "ADMINISTRADOR",
-    "notificaciones": "28"
+    "notificaciones": "28",
+    "tipo_usuario": {
+      "id_tipo_usuario": 1,
+      "nombre": "ADMINISTRADOR",
+      "repuestos": "2",
+      "kardex_repuestos": "1",
+      "equipos_servicio": "2",
+      "servicios_pendientes": "2",
+      "consultar_servicios": "2",
+      "clientes": "2",
+      "empresas": "2",
+      "landing_page": "2",
+      "empleados": "2",
+      "roles": "2"
+    },
+    "tipos_usuarios": [
+      {
+        "id_tipo_usuario": 1,
+        "nombre": "ADMINISTRADOR",
+        "repuestos": "2",
+        "kardex_repuestos": "1",
+        "equipos_servicio": "2",
+        "servicios_pendientes": "2",
+        "consultar_servicios": "2",
+        "clientes": "2",
+        "empresas": "2",
+        "landing_page": "2",
+        "empleados": "2",
+        "roles": "2"
+      },
+      {
+        "id_tipo_usuario": 1,
+        "nombre": "GERENTE",
+        "repuestos": "2",
+        "kardex_repuestos": "1",
+        "equipos_servicio": "2",
+        "servicios_pendientes": "2",
+        "consultar_servicios": "2",
+        "clientes": "2",
+        "empresas": "2",
+        "landing_page": "2",
+        "empleados": "2",
+        "roles": "2"
+      }
+    ]
   },
   {
     "id_usuario": 2,
@@ -17,7 +61,21 @@
     "clave": "admin2",
     "estado": "INACTIVO",
     "tipo": "ADMINISTRADOR",
-    "notificaciones": "5"
+    "notificaciones": "5",
+    "tipo_usuario": {
+      "id_tipo_usuario": 1,
+      "nombre": "ADMINISTRADOR",
+      "repuestos": "2",
+      "kardex_repuestos": "1",
+      "equipos_servicio": "2",
+      "servicios_pendientes": "2",
+      "consultar_servicios": "2",
+      "clientes": "2",
+      "empresas": "2",
+      "landing_page": "2",
+      "empleados": "2",
+      "roles": "2"
+    }
   },
   {
     "id_usuario": 3,
