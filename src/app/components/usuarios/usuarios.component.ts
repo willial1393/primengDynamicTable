@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Usuario} from '../../models/usuario';
 import {UsuarioService} from '../../services/usuario.service';
 import {TipousuarioService} from '../../services/tipousuario.service';
-import {DynamicTableComponent} from '../dynamic-table/dynamic-table.component';
+import {DynamicTableCol, DynamicTableType} from '../dynamic-table/dynamic-table.component';
 
 @Component({
   selector: 'app-usuarios',
@@ -12,7 +12,7 @@ import {DynamicTableComponent} from '../dynamic-table/dynamic-table.component';
 export class UsuariosComponent implements OnInit {
 
   usuarios: Usuario[] = [];
-  cols: any[];
+  cols: DynamicTableCol[];
 
   constructor(private usuarioService: UsuarioService,
               private tipousuarioService: TipousuarioService) {
@@ -28,14 +28,14 @@ export class UsuariosComponent implements OnInit {
         const opt: any[] = [];
         Array.prototype.push.apply(opt, value);
         this.cols = [
-          {field: 'correo_electronico', header: 'Correo', type: DynamicTableComponent.TYPE.text, required: true},
-          {field: 'estado', header: 'Estado', type: DynamicTableComponent.TYPE.text, required: true},
-          {field: 'id_usuario', header: 'ID', type: DynamicTableComponent.TYPE.number, required: true},
-          {field: 'notificaciones', header: 'Notificaciones', type: DynamicTableComponent.TYPE.currency, required: true},
+          {field: 'correo_electronico', header: 'Correo', type: DynamicTableType.text, required: true},
+          {field: 'estado', header: 'Estado', type: DynamicTableType.text, required: true},
+          {field: 'id_usuario', header: 'ID', type: DynamicTableType.number, required: true, autoRange: false, min: 0, max: 10},
+          {field: 'notificaciones', header: 'Notificaciones', type: DynamicTableType.currency, required: true, autoRange: true},
           {
             field: 'tipo_usuario',
             header: 'Tipo usuario',
-            type: DynamicTableComponent.TYPE.select,
+            type: DynamicTableType.select,
             options: opt,
             label: 'nombre',
             required: true
@@ -43,7 +43,7 @@ export class UsuariosComponent implements OnInit {
           {
             field: 'tipos_usuarios',
             header: 'Tipos usuarios',
-            type: DynamicTableComponent.TYPE.multiselect,
+            type: DynamicTableType.multiselect,
             options: opt,
             label: 'nombre',
             required: true

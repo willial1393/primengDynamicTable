@@ -5,6 +5,29 @@ import exportFromJSON from 'export-from-json';
 import * as moment from 'moment';
 import {isNumeric} from 'rxjs/internal-compatibility';
 
+export interface DynamicTableCol {
+  field?: string;
+  header?: string;
+  type?: DynamicTableType;
+  options?: any[];
+  label?: string;
+  required?: boolean;
+  autoRange?: boolean;
+  min?: number;
+  max?: number;
+  values?: number[];
+}
+
+export class DynamicTableType {
+  static number = 'number';
+  static select = 'select';
+  static image = 'image';
+  static multiselect = 'multiselect';
+  static currency = 'currency';
+  static textArea = 'text-area';
+  static text = 'text';
+}
+
 @Component({
   selector: 'app-dynamic-table',
   templateUrl: './dynamic-table.component.html',
@@ -12,17 +35,7 @@ import {isNumeric} from 'rxjs/internal-compatibility';
 })
 export class DynamicTableComponent implements OnInit, OnChanges {
 
-  public static TYPE = {
-    number: 'number',
-    select: 'select',
-    image: 'image',
-    multiselect: 'multiselect',
-    currency: 'currency',
-    textArea: 'text-area',
-    text: 'text'
-  };
-
-  @Input() cols: any[];
+  @Input() cols: DynamicTableCol[];
   @Input() data: any[];
   // tslint:disable-next-line:no-output-on-prefix
   @Output() onStoreRow = new EventEmitter<any>();
@@ -41,20 +54,25 @@ export class DynamicTableComponent implements OnInit, OnChanges {
   constructor(private messageService: MessageService,
               private sanitizer: DomSanitizer) {
     // this.cols = [
-    //   {field: 'name', header: 'Nombre', type: 'text', required: true},
-    //   {field: 'type', header: 'Tipo', type: 'text', required: true},
-    //   {field: 'image', header: 'Imagen', type: 'image', required: true},
-    //   {field: 'url', header: 'Url', type: 'text', required: true},
-    //   {field: 'url', header: 'Url', type: 'number', required: true},
-    //   {field: 'url', header: 'Url', type: 'currency', required: true},
-    //   {field: 'description', header: 'Descripción', type: 'text-area', required: true},
+    //   {field: 'correo_electronico', header: 'Correo', type: DynamicTableType.text, required: true},
+    //   {field: 'estado', header: 'Estado', type: DynamicTableType.text, required: true},
+    //   {field: 'id_usuario', header: 'ID', type: DynamicTableType.number, required: true, autoRange: false, min: 0, max: 10},
+    //   {field: 'notificaciones', header: 'Notificaciones', type: DynamicTableType.currency, required: true, autoRange: true},
     //   {
-    //     field: 'state', header: 'Estado', type: 'select'
-    //     , options: res['response'], label: 'name', required: true
+    //     field: 'tipo_usuario',
+    //     header: 'Tipo usuario',
+    //     type: DynamicTableType.select,
+    //     options: opt,
+    //     label: 'nombre',
+    //     required: true
     //   },
     //   {
-    //     field: 'state', header: 'Estado', type: 'multiselect'
-    //     , options: res['response'], label: 'name', required: true
+    //     field: 'tipos_usuarios',
+    //     header: 'Tipos usuarios',
+    //     type: DynamicTableType.multiselect,
+    //     options: opt,
+    //     label: 'nombre',
+    //     required: true
     //   }
     // ];
   }
@@ -63,16 +81,18 @@ export class DynamicTableComponent implements OnInit, OnChanges {
     if (changes['data'] || changes['cols']) {
       if (this.cols) {
         for (const col of this.cols) {
-          if (col.type === DynamicTableComponent.TYPE.number
-            || col.type === DynamicTableComponent.TYPE.currency) {
-            const values: number[] = this.data.map((x) => {
-              return x[col.field];
-            });
-            col.min = Math.min(...values);
-            col.max = Math.max(...values);
+          if (col.type === DynamicTableType.number
+            || col.type === DynamicTableType.currency) {
+            if (col.autoRange) {
+              const values: number[] = this.data.map((x) => {
+                return x[col.field];
+              });
+              col.min = Math.min(...values);
+              col.max = Math.max(...values);
+            }
             col.values = [col.min, col.max];
           }
-          if (col.type === DynamicTableComponent.TYPE.select) {
+          if (col.type === DynamicTableType.select) {
             const obj = {};
             obj[col.label] = this.defaultLabel;
             col.options = [obj].concat(col.options);
@@ -204,10 +224,10 @@ export class DynamicTableComponent implements OnInit, OnChanges {
         const obj: any = {};
         for (const c of this.cols) {
           switch (c.type) {
-            case DynamicTableComponent.TYPE.select:
+            case DynamicTableType.select:
               obj[c.header] = x[c.field] ? x[c.field][c.label] : '';
               break;
-            case DynamicTableComponent.TYPE.multiselect:
+            case DynamicTableType.multiselect:
               if (x[c.field]) {
                 let values = '';
                 for (const r of x[c.field]) {
