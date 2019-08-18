@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Usuario} from '../../models/usuario';
 import {UsuarioService} from '../../services/usuario.service';
 import {TipousuarioService} from '../../services/tipousuario.service';
+import {DynamicTableComponent} from '../dynamic-table/dynamic-table.component';
 
 @Component({
   selector: 'app-usuarios',
@@ -27,14 +28,14 @@ export class UsuariosComponent implements OnInit {
         const opt: any[] = [];
         Array.prototype.push.apply(opt, value);
         this.cols = [
-          {field: 'correo_electronico', header: 'Correo', type: 'text', required: true},
-          {field: 'estado', header: 'Estado', type: 'text', required: true},
-          {field: 'id_usuario', header: 'ID', type: 'number', required: true},
-          {field: 'notificaciones', header: 'Notificaciones', type: 'currency', required: true},
+          {field: 'correo_electronico', header: 'Correo', type: DynamicTableComponent.TYPE.text, required: true},
+          {field: 'estado', header: 'Estado', type: DynamicTableComponent.TYPE.text, required: true},
+          {field: 'id_usuario', header: 'ID', type: DynamicTableComponent.TYPE.number, required: true},
+          {field: 'notificaciones', header: 'Notificaciones', type: DynamicTableComponent.TYPE.currency, required: true},
           {
             field: 'tipo_usuario',
             header: 'Tipo usuario',
-            type: 'select',
+            type: DynamicTableComponent.TYPE.select,
             options: opt,
             label: 'nombre',
             required: true
@@ -42,7 +43,7 @@ export class UsuariosComponent implements OnInit {
           {
             field: 'tipos_usuarios',
             header: 'Tipos usuarios',
-            type: 'multiselect',
+            type: DynamicTableComponent.TYPE.multiselect,
             options: opt,
             label: 'nombre',
             required: true

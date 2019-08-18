@@ -23,7 +23,9 @@
           {{col.header}}
           <p-sortIcon [field]="col.field"></p-sortIcon>
         </th>
-        <th *ngIf="col.type === 'multiselect'"></th>
+        <th *ngIf="col.type === 'multiselect'">
+          {{col.header}}
+        </th>
       </ng-container>
     </tr>
     <tr>
@@ -67,9 +69,9 @@
           {{rowData[col.field] != null ? rowData[col.field][col.label] : ''}}
         </ng-container>
         <ng-container *ngIf="col.type==='multiselect'">
-          <ng-container *ngFor="let item of rowData[col.field]">
-            {{item[col.label]}}
-          </ng-container>
+          <button *ngFor="let item of rowData[col.field]"
+                  pButton type="button" label="{{item[col.label]}}"
+                  class="ui-button-rounded ui-button-secondary"></button>
         </ng-container>
         <ng-container *ngIf="col.type==='image'">
           <img [src]="rowData[col.field]?getSantizeUrl(rowData[col.field]):''" alt=""

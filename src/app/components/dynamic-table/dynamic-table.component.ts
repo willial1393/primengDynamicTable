@@ -12,10 +12,18 @@ import {isNumeric} from 'rxjs/internal-compatibility';
 })
 export class DynamicTableComponent implements OnInit, OnChanges {
 
+  public static TYPE = {
+    number: 'number',
+    select: 'select',
+    image: 'image',
+    multiselect: 'multiselect',
+    currency: 'currency',
+    textArea: 'text-area',
+    text: 'text'
+  };
+
   @Input() cols: any[];
-
   @Input() data: any[];
-
   // tslint:disable-next-line:no-output-on-prefix
   @Output() onStoreRow = new EventEmitter<any>();
   // tslint:disable-next-line:no-output-on-prefix
@@ -55,7 +63,8 @@ export class DynamicTableComponent implements OnInit, OnChanges {
     if (changes['data'] || changes['cols']) {
       if (this.cols) {
         for (const col of this.cols) {
-          if (col.type === 'number' || col.type === 'currency') {
+          if (col.type === DynamicTableComponent.TYPE.number
+            || col.type === DynamicTableComponent.TYPE.currency) {
             const values: number[] = this.data.map((x) => {
               return x[col.field];
             });
@@ -63,7 +72,7 @@ export class DynamicTableComponent implements OnInit, OnChanges {
             col.max = Math.max(...values);
             col.values = [col.min, col.max];
           }
-          if (col.type === 'select') {
+          if (col.type === DynamicTableComponent.TYPE.select) {
             const obj = {};
             obj[col.label] = this.defaultLabel;
             col.options = [obj].concat(col.options);
@@ -192,12 +201,27 @@ export class DynamicTableComponent implements OnInit, OnChanges {
     const type: any = exportFromJSON.types.xls;
     exportFromJSON({
       data: list.map((x) => {
-        for (const od of this.objectsData) {
-          if (x[od.field]) {
-            x[od.field] = x[od.field][od.label];
+        const obj: any = {};
+        for (const c of this.cols) {
+          switch (c.type) {
+            case DynamicTableComponent.TYPE.select:
+              obj[c.header] = x[c.field] ? x[c.field][c.label] : '';
+              break;
+            case DynamicTableComponent.TYPE.multiselect:
+              if (x[c.field]) {
+                let values = '';
+                for (const r of x[c.field]) {
+                  values += r[c.label] + ',';
+                }
+                obj[c.header] = values.substr(0, values.length - 1);
+              }
+              break;
+            default:
+              obj[c.header] = x[c.field];
+              break;
           }
         }
-        return x;
+        return obj;
       }),
       fileName: 'TOOLBOXCENTER ' + moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
       exportType: type
